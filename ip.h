@@ -49,7 +49,7 @@ void computeHostCount(InfoIP *ip);
 void defineType(InfoIP *ip);
 
 // Build a 32-bit mask with all the host bits to 1
-uint32_t setHostbits(int bitsHost);
+uint32_t maskFromHostBits(int bits);
 
 // Compute the broadcast address
 void computeBroadcast(InfoIP *ip);

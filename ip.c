@@ -108,20 +108,20 @@ void computeHostCount(InfoIP *ip) {
     }
 }
 
-uint32_t setHostbits(int bitsHost) {
-    if (bitsHost == 0) {
+uint32_t maskFromHostBits(int bits) {
+    if (bits == 0) {
         return 0;
     }
-    return 0xFFFFFFFFu >> (32 - bitsHost);
+    return 0xFFFFFFFFu >> (32 - bits);
 }
 
 void computeBroadcast(InfoIP *ip){
-    uint32_t hostBitsSet = setHostbits(ip->hostBits);
+    uint32_t mask = maskFromHostBits(ip->hostBits);
 
-    ip->octetsBroadcast[0] = ip->octetsNetworkAddress[0] | (uint8_t)(hostBitsSet >> 24);
-    ip->octetsBroadcast[1] = ip->octetsNetworkAddress[1] | (uint8_t)(hostBitsSet >> 16);
-    ip->octetsBroadcast[2] = ip->octetsNetworkAddress[2] | (uint8_t)(hostBitsSet >> 8);
-    ip->octetsBroadcast[3] = ip->octetsNetworkAddress[3] | (uint8_t)(hostBitsSet);
+    ip->octetsBroadcast[0] = ip->octetsNetworkAddress[0] | (uint8_t)(mask >> 24);
+    ip->octetsBroadcast[1] = ip->octetsNetworkAddress[1] | (uint8_t)(mask >> 16);
+    ip->octetsBroadcast[2] = ip->octetsNetworkAddress[2] | (uint8_t)(mask >> 8);
+    ip->octetsBroadcast[3] = ip->octetsNetworkAddress[3] | (uint8_t)(mask);
 
 
 }
