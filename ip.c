@@ -64,6 +64,7 @@ IPStatus computeIP(InfoIP *ip, const char *string) {
     computeNetworkAddress(ip);
     computeHostCount(ip);
     defineType(ip);
+    computeBroadcast(ip);
     return IP_OK;
 }
 
@@ -85,10 +86,10 @@ uint32_t maskFromCidr(int cidr) {
 
 void computeMask(InfoIP *ip) {
     uint32_t mask = maskFromCidr(ip->cidr);
-    ip->octetsMask[0] = (mask >> 24);
-    ip->octetsMask[1] = (mask >> 16);
-    ip->octetsMask[2] = (mask >> 8);
-    ip->octetsMask[3] =  mask;
+    ip->octetsMask[0] = (uint8_t)(mask >> 24);
+    ip->octetsMask[1] = (uint8_t)(mask >> 16);
+    ip->octetsMask[2] = (uint8_t)(mask >> 8);
+    ip->octetsMask[3] =  (uint8_t)mask;
 }
 
 void computeNetworkAddress(InfoIP *ip) {
@@ -107,6 +108,25 @@ void computeHostCount(InfoIP *ip) {
     }
 }
 
+uint32_t setHostbits(int bitsHost) {
+    if (bitsHost == 0) {
+        return 0;
+    }
+    return 0xFFFFFFFFu >> (32 - bitsHost);
+}
+
+void computeBroadcast(InfoIP *ip){
+    uint32_t hostBitsSet = setHostbits(ip->hostBits);
+
+    ip->octetsBroadcast[0] = ip->octetsNetworkAddress[0] | (uint8_t)(hostBitsSet >> 24);
+    ip->octetsBroadcast[1] = ip->octetsNetworkAddress[1] | (uint8_t)(hostBitsSet >> 16);
+    ip->octetsBroadcast[2] = ip->octetsNetworkAddress[2] | (uint8_t)(hostBitsSet >> 8);
+    ip->octetsBroadcast[3] = ip->octetsNetworkAddress[3] | (uint8_t)(hostBitsSet);
+
+
+}
+
+
 void printIP(const InfoIP *ip) {
     printf("IP              : %" PRIu8 ".%" PRIu8 ".%" PRIu8 ".%" PRIu8 "/%d\n",ip->octetsIP[0], ip->octetsIP[1], ip->octetsIP[2], ip->octetsIP[3], ip->cidr);
     printf("Decimal Mask    : %" PRIu8 ".%" PRIu8 ".%" PRIu8 ".%" PRIu8 "\n",ip->octetsMask[0], ip->octetsMask[1], ip->octetsMask[2], ip->octetsMask[3]);
@@ -120,6 +140,7 @@ void printIP(const InfoIP *ip) {
     printf("Host Bits       : %d\n", ip->hostBits);
     printf("Network Address : %" PRIu8 ".%" PRIu8 ".%" PRIu8 ".%" PRIu8 "/%d\n",ip->octetsNetworkAddress[0], ip->octetsNetworkAddress[1],ip->octetsNetworkAddress[2], ip->octetsNetworkAddress[3], ip->cidr);
     printf("Usable Hosts    : %ld\n", ip->nbHosts);
+    printf("Broadcast       : %" PRIu8 ".%" PRIu8 ".%" PRIu8 ".%" PRIu8 "\n",ip->octetsBroadcast[0], ip->octetsBroadcast[1], ip->octetsBroadcast[2], ip->octetsBroadcast[3]);
 }
 
 void printUsage(const char *programName) {

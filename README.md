@@ -5,9 +5,11 @@ A small C program that computes network information from an IP address and CIDR.
 ## Features
 
 - Computes the subnet mask
+- Determines whether the IP is public or private
 - Computes the network address
 - Counts the number of usable hosts
-- Determines whether the IP is public or private
+- Computes the broadcast address
+
 
 ## Build
 
@@ -37,5 +39,6 @@ Network Bits    : 24
 Host Bits       : 8
 Network Address : 192.168.5.0/24
 Usable Hosts    : 254
+Broadcast       : 192.168.5.255
 ```
 

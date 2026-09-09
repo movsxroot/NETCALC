@@ -7,6 +7,7 @@ typedef struct {
     uint8_t octetsIP[4];
     uint8_t octetsMask[4];
     uint8_t octetsNetworkAddress[4];
+    uint8_t octetsBroadcast[4];
     int cidr;
     int networkBits;
     int hostBits;
@@ -46,6 +47,12 @@ void computeHostCount(InfoIP *ip);
 
 // Check the IP and set its type to PUBLIC or PRIVATE
 void defineType(InfoIP *ip);
+
+// Build a 32-bit mask with all the host bits to 1
+uint32_t setHostbits(int bitsHost);
+
+// Compute the broadcast address
+void computeBroadcast(InfoIP *ip);
 
 // Print the computed IP info / usage instructions
 void printIP(const InfoIP *ip);
