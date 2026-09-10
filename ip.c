@@ -104,7 +104,8 @@ void computeHostCount(InfoIP *ip) {
     } else if (ip->cidr == 31) {
         ip->nbHosts = 2;
     } else {
-        ip->nbHosts = (1L << ip->hostBits) - 2;
+        uint64_t pow2 = 1;
+        ip->nbHosts = (pow2 << ip->hostBits) - 2;
     }
 }
 
@@ -139,7 +140,7 @@ void printIP(const InfoIP *ip) {
     printf("Network Bits    : %d\n", ip->networkBits);
     printf("Host Bits       : %d\n", ip->hostBits);
     printf("Network Address : %" PRIu8 ".%" PRIu8 ".%" PRIu8 ".%" PRIu8 "/%d\n",ip->octetsNetworkAddress[0], ip->octetsNetworkAddress[1],ip->octetsNetworkAddress[2], ip->octetsNetworkAddress[3], ip->cidr);
-    printf("Usable Hosts    : %ld\n", ip->nbHosts);
+    printf("Usable Hosts    : %" PRIu64 "\n", ip->nbHosts);
     printf("Broadcast       : %" PRIu8 ".%" PRIu8 ".%" PRIu8 ".%" PRIu8 "\n",ip->octetsBroadcast[0], ip->octetsBroadcast[1], ip->octetsBroadcast[2], ip->octetsBroadcast[3]);
 }
 

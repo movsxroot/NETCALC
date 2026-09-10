@@ -11,7 +11,7 @@ typedef struct {
     int cidr;
     int networkBits;
     int hostBits;
-    long nbHosts;
+    uint64_t nbHosts;
     int type; // Private or Public
 } InfoIP;
 
